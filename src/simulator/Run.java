@@ -1,12 +1,11 @@
 package simulator;
 
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 
 public class Run {
 	
-	public Variabele v;
+	public Variable v;
 	
 	public Main main;
 	
@@ -42,7 +41,7 @@ public class Run {
 		
 		stopRun = false;
 		
-		v = new Variabele();
+		v = new Variable();
 		
 		valueUltra = main.simulator.graphicsPanel.gd.ultraDistance;
 		valueLightL = main.simulator.graphicsPanel.gd.lightL;
@@ -61,7 +60,8 @@ public class Run {
 		runMATLAB();
 		
 	}
-	
+
+
 	public void runMATLAB(){
 
 		read(0, this.main.simulator.code.getSize()-1);
@@ -165,8 +165,8 @@ public class Run {
 			if(lineI.length()>0){
 				if(lineI.contains(";")){
 					lineI = lineI.substring(0, lineI.indexOf(";"));
-				}else if(lineI.contains("%")){
-					lineI = lineI.substring(0, lineI.indexOf("%"));
+				}else if(lineI.contains("//")){
+					lineI = lineI.substring(0, lineI.indexOf("//"));
 				}
 			}
 			
@@ -175,7 +175,7 @@ public class Run {
 				usedMethod = "isSpace";
 			
 			//verify begin or end
-			}else if(lineI.contains("COM_CloseNXT") || lineI.contains("close all") || lineI.contains("COM_OpenNXT()") || lineI.contains("COM_SetDefaultNXT(") || lineI.contains("COM_CLoseNXT(")){
+			}else if(lineI.contains("") || lineI.contains("close all") || lineI.contains("COM_OpenNXT()") || lineI.contains("COM_SetDefaultNXT(") || lineI.contains("COM_CLoseNXT(")){
 				usedMethod = "verify begin or end";
 				
 			
@@ -183,12 +183,12 @@ public class Run {
 			}else if(lineI.contains("for")){
 				
 				usedMethod = "for";
-				int regelEnd = this.main.simulator.code.regelEnd(i+1, this.main.simulator.code.numberOfSpace(i));
+				int endOfLine = this.main.simulator.code.endOfLine(i+1, this.main.simulator.code.numberOfSpace(i));
 				
-				if(regelEnd == -1){
+				if(endOfLine == -1){
 					main.simulator.outputPanel.print("Er is geen END voor FOR op line " + (i+1));
 				}else{
-					Loop loop = new Loop("for", lineI, i, regelEnd);
+					Loop loop = new Loop("for", lineI, i, endOfLine);
 					boolean b = forLoop(loop);
 					if(b){
 						
@@ -204,7 +204,7 @@ public class Run {
 			}else if(lineI.contains("while")){
 				//System.out.println("#while");
 				usedMethod = "while";
-				int regelEnd = main.simulator.code.regelEnd(i, this.main.simulator.code.numberOfSpace(i));
+				int regelEnd = main.simulator.code.endOfLine(i, this.main.simulator.code.numberOfSpace(i));
 				
 				//System.out.println("#regelEnd = "+regelEnd);
 				
@@ -231,7 +231,7 @@ public class Run {
 				System.out.println("#\tif");
 				
 				boolean statement = berekenBoolean(lineI);
-				int volgende = main.simulator.code.regelEnd(i, main.simulator.code.numberOfSpace(i));
+				int volgende = main.simulator.code.endOfLine(i, main.simulator.code.numberOfSpace(i));
 				int endd = main.simulator.code.regelNummerEnd(i);
 				
 				System.out.println("#\tstatement = "+statement);
@@ -483,7 +483,7 @@ public class Run {
 		if(statement){
 			return i++;
 		}else{
-			return main.simulator.code.regelEnd(i, main.simulator.code.numberOfSpace(i));
+			return main.simulator.code.endOfLine(i, main.simulator.code.numberOfSpace(i));
 			
 		}
 		
@@ -577,7 +577,7 @@ public class Run {
 		
 		
 		//waarde = 			"NXTMotor('AC', 'Power', 60);"
-		String waarde = v.getWaarde(naam);
+		String waarde = v.getValue(naam);
 		nxtMotor(waarde);
 		
 	}
@@ -602,7 +602,7 @@ public class Run {
 		s.close();
 		
 		//sensor = 		"NXTMotor('A', 'Power', 20);"
-		String sensor = v.getWaarde(var);
+		String sensor = v.getValue(var);
 		int index = sensor.indexOf("'");
 		
 		
@@ -654,7 +654,7 @@ public class Run {
 		s.close();
 		
 		//sensor = 		"NXTMotor('A', 'Power', 20);"
-		String sensor = v.getWaarde(var);
+		String sensor = v.getValue(var);
 		int index = sensor.indexOf("'");
 		
 		
@@ -713,7 +713,7 @@ public class Run {
 		v.setPower(var, 0);
 		
 		//sensor = 		"NXTMotor('A', 'Power', 20);"
-		String sensor = v.getWaarde(var);
+		String sensor = v.getValue(var);
 		int index = sensor.indexOf("'");
 		
 		
@@ -740,156 +740,8 @@ public class Run {
 		
 		activeerMotoren(sensoren, 0);
 		
-		
-		
 	}
-		
-		
-	/*
-	private void stop(String line){
-		//#stop
-		line = line.trim();
-		//line = "mA.Stop('off')"	
-		
-		Scanner s = new Scanner(line);
-		s.useDelimiter("");
-		
-		String character = "";
-		String var = "";
-		
-		do{
-			var+=character;
-			character = s.next();
-		}while(!character.equals("."));
-		
-		//var = "mA"
-		
-		s.close();
-		
-		//sensor = 		"NXTMotor('A', 'Power', 20);"
-		String sensor = v.getWaarde(var);
-		int index = sensor.indexOf("'");
-		
-		
-		
-		//scanner heeft 		"A', 'Power', 20);"
-		Scanner scanner = new Scanner(sensor.substring(index+1));
-		scanner.useDelimiter("");
-		
-		
-		
-		String temp = "";
-		String sensoren = "";
-		
-		do{
-			temp = scanner.next();
-			if(temp.equals("A") || temp.equals("B") || temp.equals("C")){
-				sensoren += temp;
-			}
-			
-		}while(!temp.equals("'"));
-		
-		//sensoren = "AB"
-		s.close();
-		
-		activeerMotoren(sensoren, 0);
-		
-		////////////for loop moet in commentaar
-		for(int i=0; i<sensoren.length(); i++){
-			System.out.println("main.init.robot.setMotor("+sensoren.charAt(i)+", 0);");
-			
-			main.init.robot.setMotor(sensoren.charAt(i), 0);
-			main.init.robot.stopMotor(sensoren.charAt(i));
-		}
-		
-		
-	}
-	
-	*/
-	
-	
-	
-	
-	/*
-	private Object getObject(String s){
-		//NXTMotor('AC', 'Power', 60);
-		if(s.contains("NXTMotor")){
-			
-			Scanner scanner = new Scanner(s.substring(9));
-			scanner.useDelimiter(",");
-			
-			String[] deel = new String[3];
-			for(int i = 0; i < deel.length; i++){
-				deel[i] = scanner.next();
-			}
-			
-			//'AC'
-			Scanner s1 = new Scanner(deel[0]);
-			s1.useDelimiter("");
-			deel[0] = "";
-			
-			while(s1.hasNext()){
-				char c = s1.next().charAt(0);
-				if(c == '\''){
-					
-				}else{
-					deel[0] += c;
-				}
-			}
-			
-			
-			//'Power'
-			Scanner s2 = new Scanner(deel[1]);
-			
-			//System.out.println("\t*****\tdeel[2]=" + deel[2] + "\t*****");
-			
-			//60 met misschien ')'
-			Scanner s3 = new Scanner(deel[2]);
-			s1.useDelimiter("");
-			deel[2] = "";
-			
-			while(s3.hasNext()){
-				char c = s3.next().charAt(0);
-				//60
-				if(Character.isDigit(c)){
-					deel[2] += c;
-				}else{
-					
-				}
-			}
-			int speed = Integer.parseInt(deel[2]);
-			
-			
-			Scanner last = new Scanner(deel[0]);
-			last.useDelimiter("");
-			
-			Variabele temp = new Variabele(3);
-			while(last.hasNext()){
-				String ABC = last.next();
-				if(ABC.charAt(0) == 'A'){
-					temp.add("A", new Motor(speed));
-					
-				}else if(ABC.charAt(0) == 'B'){
-					temp.add("B", new Motor(speed));
-					
-				}else if(ABC.charAt(0) == 'C'){
-					temp.add("C", new Motor(speed));
-				}
-			
-			}
-			
-			 
-			return temp;
-			
-		}else{
-			return null;
-		}
-		
-		
-		
-		
-	}
-	*/
+
 	
 	private void openLight(String line, int lineNumber){
 		//OpenLight(SENSOR_4, ‘active’);		or ‘ACTIVE’
@@ -933,10 +785,6 @@ public class Run {
 		}else{
 			return valueLightR;
 		}
-		
-		
-		
-		
 	}
 	
 	
@@ -1014,8 +862,8 @@ public class Run {
 		//teller = "i"
 		
 		if(v.has(teller)){
-			v.increaseWaarde(teller);
-			return Integer.parseInt(v.getWaarde(teller));
+			v.increaseValue(teller);
+			return Integer.parseInt(v.getValue(teller));
 		}else{
 			v.add(teller, tellerStart+"");
 			return tellerStart;
@@ -1198,7 +1046,7 @@ public class Run {
 		}else if(v.has(deel)){
 		
 			//v.getWaarde(deel) = "GetLight(SENSOR_1)"
-			return getValue(v.getWaarde(deel));
+			return getValue(v.getValue(deel));
 			
 			
 			//return Integer.parseInt(v.getWaarde(deel));
@@ -1259,7 +1107,7 @@ public class Run {
 		
 		stopRun = false;
 		
-		v = new Variabele();
+		v = new Variable();
 		
 		valueUltra = main.simulator.graphicsPanel.gd.ultraDistance;
 		valueLightL = main.simulator.graphicsPanel.gd.lightL;

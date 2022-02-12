@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 
 public class Main {
@@ -15,7 +15,6 @@ public class Main {
 	public static final int WIDTH = 1024, HEIGHT = 768 + 2*MenuBar.HEIGHT;
 	//public final static Color ORANGE = new Color(68, 33, 14);
 	public final static Color ORANGE = new Color(232, 131, 56);
-	
 	
 	public static JFrame frame;
 	
@@ -29,8 +28,7 @@ public class Main {
 		
 		init();
 	}
-	
-	
+
 	public void init(){
 		
 		frame = new JFrame();
@@ -39,15 +37,17 @@ public class Main {
 		frame.setTitle(title);
 		frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		frame.setResizable(false);
+		frame.setLocationRelativeTo(null);
+
 		frame.pack();
-		//frame.setVisible(true);
+		frame.setVisible(true);
 		
 		init = new Init(this);
 			
 	}
 	
 	
-	public void start(){
+	//public void start(){
 		
 		/*
 		boolean running = true;
@@ -90,7 +90,7 @@ public class Main {
 		*/
 		
 		//System.out.println("Program ends");
-	}
+	//}
 	
 	
 	/*
@@ -107,91 +107,84 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
+		Runnable r1 = () -> {
+			endDetected = false;
 
-		
-		Runnable r1 = new Runnable() {
-			public void run() {
-				endDetected = false;
-				
-				boolean runCode = true;
-				while(runCode){
-					System.out.print("");
-					if(simulator!=null && simulator.menuBar.runIsClicked){
-						System.out.println("###1");
-						//simulator.graphicsPanel.gd.printData();
-						//simulator.graphicsPanel.gd.printData2();
-						simulator.performStep();
-						//simulator.refresh();
-						
-						try {
-							double seconds = 0.5;
-							System.out.println("Main:\twait "+seconds+" seconds... ");
-							Thread.sleep((int) (seconds*1000));
-						} catch (InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}	
-						
-						if(simulator.run !=null){
-							System.out.println("###2");
-							if(simulator.run.pauseFound){
-								System.out.println("###3");
-								try {
-									System.out.println("Main:\tpause "+simulator.run.pause+" milliseconds... ");
-									Thread.sleep((int) (simulator.run.pause+0.5));
-									simulator.run.pauseFound = false;
-									simulator.run.read(simulator.run.pauseLine+1, simulator.run.pauseEnd);
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
-								}	
-							}else{
-								System.out.println("###4");
-								if(!simulator.run.loopSet.isEmpty()){
-									Loop loop = simulator.run.loopSet.pop();
-									System.out.println("###5");
-									if(loop.type.equals("for")){
-										simulator.run.forLoop(loop);
-									}else{
-										simulator.run.whileLoop(loop);
-									}
-								}else{
-									System.out.println("###6");
-									System.out.println("# stopRun is true");
-									//runCode = false;
-									
-									if(!endDetected){
-										System.out.println("prrrr");
-										endDetected = true;
-										simulator.outputPanel.setMidden("Running the MATLAB-file is completed.\n");
-										//simulator.print("Reading the MATLAB-file is completed.\n");
-									}
-									
-									if(simulator.graphicsPanel.gd.outOfScreen()){
-										
-										//System.out.println("# outOfScreen");
-										//runCode=false;
-									}
-								}	
-								
-							}
-						}
-						
+			boolean runCode = true;
+			while(runCode){
+				System.out.print("");
+				if(simulator!=null && simulator.menuBar.runIsClicked){
+					System.out.println("#running");
+
+					//simulator.graphicsPanel.gd.printData();
+					//simulator.graphicsPanel.gd.printData2();
+					simulator.performStep();
+					//simulator.refresh();
+
+					try {
+						double seconds = 0.5;
+						System.out.println("Main:\twait "+seconds+" seconds... ");
+						Thread.sleep((int) (seconds*1000));
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-					
-					
+
+					if(simulator.run !=null){
+						System.out.println("###2");
+						if(simulator.run.pauseFound){
+							System.out.println("###3");
+							try {
+								System.out.println("Main:\tpause "+simulator.run.pause+" milliseconds... ");
+								Thread.sleep((int) (simulator.run.pause+0.5));
+								simulator.run.pauseFound = false;
+								simulator.run.read(simulator.run.pauseLine+1, simulator.run.pauseEnd);
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}else{
+							System.out.println("###4");
+							if(!simulator.run.loopSet.isEmpty()){
+								Loop loop = simulator.run.loopSet.pop();
+								System.out.println("###5");
+								if(loop.type.equals("for")){
+									simulator.run.forLoop(loop);
+								}else{
+									simulator.run.whileLoop(loop);
+								}
+							}else{
+								System.out.println("###6");
+								System.out.println("# stopRun is true");
+								//runCode = false;
+
+								if(!endDetected){
+									System.out.println("prrrr");
+									endDetected = true;
+									simulator.outputPanel.setMidden("Running the NBC-file is completed.\n");
+									//simulator.print("Reading the MATLAB-file is completed.\n");
+								}
+
+								if(simulator.graphicsPanel.gd.outOfScreen()){
+
+									//System.out.println("# outOfScreen");
+									//runCode=false;
+								}
+							}
+
+						}
+					}
+
 				}
-				
-				System.out.println("Thread 1 is stopped.");
-				
-	         }
-	     };
+
+
+			}
+
+			System.out.println("Thread 1 is stopped.");
+
+		 };
 	     
 	     new Thread(r1).start();
-	     
-	     
-	     
-	     
 	     
 	     Runnable r2 = new Runnable() {
 				public void run() {
@@ -201,11 +194,7 @@ public class Main {
 		     };
 		
 	     new Thread(r2).start();
-	    
-	     
-	     
-		
-		
+
 	}
 	
 	

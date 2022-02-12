@@ -53,13 +53,13 @@ public class OutputPanel extends JTextPane{
 		
 	}
 	
-	public void regelRunning(int i){
+	/*public void regelRunning(int i){
 		midden = "Running line "+i+"...\n";
 		
 		text = begin + midden2 + midden + eind;
 		setText(text);
 		
-	}
+	}*/
 	
 	
 	

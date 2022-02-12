@@ -142,7 +142,6 @@ public class Robot {
 			System.out.println("Robot:\tThere is no sensor " + character);
 		}
 		
-		
 		update();
 	}
 	

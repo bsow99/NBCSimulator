@@ -46,9 +46,7 @@ public class ToolsPanel extends JPanel{
 		setVisible(true);
 	}
 	
-	
-	
-	
+
 	private void maakCellen(){
 		cellen = new JButton[KOLOMMEN*RIJEN];
 		for(int i = 0; i < cellen.length; i++){
@@ -95,9 +93,7 @@ public class ToolsPanel extends JPanel{
 						
 						System.out.println("indexVorige = "+indexVorige);
 						System.out.println("deleteWasClicked = "+deleteWasClicked);
-						
-						
-						
+
 						if(indexVorige!=-1 && !deleteWasClicked){
 							
 							cellen[indexVorige].setBorder(new JButton().getBorder());
@@ -142,8 +138,7 @@ public class ToolsPanel extends JPanel{
 		}
 		return -1;
 	}
-	
-	
+
 	
 	private void initImages(){
 		
@@ -202,12 +197,5 @@ public class ToolsPanel extends JPanel{
 			//names[16+i] = "robot" + (i+1);
 			//names[16+i] = "robotled" + (i+1);
 		}
-		
-		
-		
-		
 	}
-	
-	
-	
 }

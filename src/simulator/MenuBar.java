@@ -72,7 +72,7 @@ public class MenuBar extends JMenuBar{
         });
         
 		
-		importMatlab = new JMenuItem("Import MATLAB-file");
+		importMatlab = new JMenuItem("Import NBC-file");
 		importMatlab.setIcon(new ImageIcon(this.getClass().getResource("/res/images/menu/import.png")));
 		importMatlab.addActionListener(new ActionListener() {
 			@Override
@@ -86,8 +86,7 @@ public class MenuBar extends JMenuBar{
                 main.simulator.codePanel.refresh();
                 main.simulator.refresh();
                 
-                
-                
+
 			}
         });
 		
@@ -126,13 +125,10 @@ public class MenuBar extends JMenuBar{
                 
                 runIsClicked = true;
                 main.simulator.menuBar.refresh();
-                main.simulator.run = new Run(main);
+                main.simulator.run = new RunNBC(main);
                 
 			}
         });
-	
-	
-	
 	
 	abort = new JMenuItem("Abort");
 	abort.setIcon(new ImageIcon(this.getClass().getResource("/res/images/menu/abort.png")));

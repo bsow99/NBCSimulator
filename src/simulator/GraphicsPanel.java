@@ -272,7 +272,8 @@ public class GraphicsPanel extends JPanel{
 	
 	public void drive(){
 		
-		int speedLeft = main.init.robot.motorLeft.getSpeed(), speedRight = main.init.robot.motorRight.getSpeed();
+		int speedLeft = main.init.robot.motorLeft.getSpeed(),
+			speedRight = main.init.robot.motorRight.getSpeed();
 		//System.out.println("speedLeft = "+speedLeft+"\tspeedRight = "+speedRight);
 		if(!(speedLeft==0 && speedRight==0)){
 			gd.moveStep(speedLeft, speedRight);

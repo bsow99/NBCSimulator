@@ -31,10 +31,12 @@ public class Simulator{
 	
 	public static CodePanel codePanel;
 	public static OutputPanel outputPanel;
+
+	//public static JScrollPane scroll;
 	
 	public static Code code;
 	
-	public static Run run;
+	public static RunNBC run;
 	
 	public Main main;
 	
@@ -77,11 +79,16 @@ public class Simulator{
 		textPanel.add(codePanel);
 		textPanel.add(outputPanel);
 		main.add(textPanel, BorderLayout.EAST);
-		//JScrollPane s = new JScrollPane(codePanel);
+
+
+		//scroll = new JScrollPane(textPanel);
+		//main.add(scroll);
 		
 		this.main.frame.add(main, BorderLayout.PAGE_END);
 		this.main.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.main.frame.setVisible(true);
+
+
         //this.frame = frame;
 	}
 	
@@ -114,15 +121,13 @@ public class Simulator{
 		placePanels();
 	}
 	
-	
-	
-	
+
 	public void performStep(){
 
-		if(!main.init.hasLED()){
-			if(main.init.robot.motorLeft.isOn() || main.init.robot.motorRight.isOn()){
+		if(!Main.init.hasLED()){
+			if(Init.robot.motorLeft.isOn() || Init.robot.motorRight.isOn()){
 				graphicsPanel.drive();
-				graphicsPanel.gd.refreshSensors();
+				GraphicsPanel.gd.refreshSensors();
 				
 			}
 			
@@ -130,20 +135,18 @@ public class Simulator{
 			
 			try {
 				//For example, digits = "101"
-				String digits = main.init.robot.getDigitsLED();
+				String digits = Init.robot.getDigitsLED();
 				String path = " /res/images/wereld/led"+digits+".png";
-				main.simulator.graphicsPanel.gd.robot = ImageIO.read(new File(path));
+				GraphicsData.robot = ImageIO.read(new File(path));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} 
-			
+			}
 			
 		}
 		graphicsPanel.repaint();
 		main.simulator.outputPanel.verversWaardenSensoren();
 		
 	}
-	
-	
+
 }

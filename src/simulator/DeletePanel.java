@@ -66,9 +66,7 @@ public class DeletePanel extends JPanel{
 				*/
 				
 				boolean toolsWasClicked = main.simulator.toolsPanel.isClicked;
-				
-				
-				
+
 				isClicked = true;
 				main.simulator.toolsPanel.isClicked = false;
 				
@@ -81,8 +79,6 @@ public class DeletePanel extends JPanel{
 				
 				System.out.println("indexVorige = "+indexVorige);
 				System.out.println("toolsWasClicked = "+toolsWasClicked);
-				
-				
 				
 				if(indexVorige!=-1 && toolsWasClicked){
 					
@@ -102,11 +98,10 @@ public class DeletePanel extends JPanel{
 		setVisible(true);
 		
 	}
-	
-	
+
+
 	private int getIndex(String selectedURL){
-		
-		
+
 		if(selectedURL!=null){
 			for(int i=0; i<20; i++){
 				if(selectedURL.contains(main.simulator.toolsPanel.names[i])){
@@ -116,7 +111,5 @@ public class DeletePanel extends JPanel{
 		}
 		return -1;
 	}
-	
-	
-	
+
 }

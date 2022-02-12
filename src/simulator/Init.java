@@ -1,26 +1,18 @@
 package simulator;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
+/*@Overview
+
+* Dans cette classe nous creons les boutons, les fenêtres et nous
+* asssemblons toutes les images
+ */
+
+
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.UIManager;
+import javax.swing.*;
+
 
 
 public class Init {
@@ -61,7 +53,7 @@ public class Init {
 		clicksLED = 0;
 		
 		main.frame.getContentPane().removeAll();
-		main.frame.setSize(1024, 768);				///Main.WIDTH en Main.HEIGHT kan gebruikt worden!!
+		main.frame.setSize(1024, 768);				///Main.WIDTH et Main.HEIGHT peuvent être utilisés !!
 		main.frame.setLayout(new GridLayout(1,2));
 		
 		
@@ -79,49 +71,15 @@ public class Init {
 		main.frame.add(right);
 		main.frame.setVisible(true);
 	}
-	
-	private void initImagesButtons(){
-		//A, B, C, USB
-		for(int i = 0; i < 4; i++){
-			try{
-				String path;
-				if(i==0){
-					path = "A";
-				}else if(i==1){
-					path = "B";
-				}else if(i==2){
-					path = "C";
-				}else{
-					path = "USB";
-				}
-				path = "/res/images/init/icon/" + path + ".png";
-				images[1][i] = new ImageIcon(this.getClass().getResource(path));
-			}catch(NullPointerException e){
-				System.out.println("Image not found: A, B, C or USB");
-			}
-		}
-		
-		//1, 2, 3, 4
-		for(int i = 0; i < 4; i++){
-			try{
-				String path;
-				if(i==0){
-					path = "1";
-				}else if(i==1){
-					path = "2";
-				}else if(i==2){
-					path = "3";
-				}else{
-					path = "4";
-				}
-				path = "/res/images/init/icon/" + path + ".png";
-				images[2][i] = new ImageIcon(this.getClass().getResource(path));
-				}catch(NullPointerException e){
-				System.out.println("Image not found: 1, 2, 3 or 4");
-			}
-		}
-	}
-	
+
+	/**
+	 @ this class permits us to choose the wheels and the sensors to put them
+	 @ in the robot
+	 @author Babacar SOW
+	 @require nothing
+	 @throws NullPointerException :  if the images is not found
+	 */
+
 	private void setImages(){
 		imageRobot = new ImageIcon(this.getClass().getResource("/res/images/init/icon/robot.png"));
 		
@@ -179,7 +137,10 @@ public class Init {
 			}
 		}
 	}
-	
+
+	/**
+	 *
+	 */
 	private void setButtons(){
 		buttons = new JIconButton[2][4];
 		
@@ -510,54 +471,41 @@ public class Init {
 	
 	
 	private void activeerButtons(){
-		buttons[0][0].addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-                //Execute when button is pressed
-                System.out.println("Init:\tClick on buttonA");
-                
-                //#####
-                kleurImage(1,0);
-                
-    			
-    			kiesActuator("A");
-				
-			}
-        });  
+		buttons[0][0].addActionListener(e -> {
+			//Execute when button is pressed
+			System.out.println("Init:\tClick on buttonA");
+			//#####
+			kleurImage(1,0);
+
+			kiesActuator("A");
+
+		});
 		
-		buttons[0][1].addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-                //Execute when button is pressed
+		buttons[0][1].addActionListener(e -> {
 				System.out.println("Init:\tClick on buttonB");
 				kleurImage(1,1);
-    			
                 kiesActuator("B");
-			}
+
         });  
 		
-		buttons[0][2].addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-                //Execute when button is pressed
-				System.out.println("Init:\tClick on buttonC");
-				kleurImage(1,2);
-    			
-                kiesActuator("C");
-			}
+		buttons[0][2].addActionListener(e ->  {
+			//Execute when button is pressed
+			System.out.println("Init:\tClick on buttonC");
+			kleurImage(1,2);
+
+			kiesActuator("C");
+
         });  
 		
 	
 		
-		buttons[1][0].addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-                //Execute when button is pressed
-				System.out.println("Init:\tClick on button1");
-				kleurImage(2,0);
+		buttons[1][0].addActionListener(e-> {
+
+			System.out.println("Init:\tClick on button1");
+			kleurImage(2,0);
     			
-                kiesSensor("1");
-			}
+			kiesSensor("1");
+
         });  
 		
 		buttons[1][1].addActionListener(new ActionListener() {
@@ -614,57 +562,34 @@ public class Init {
 	}
 	
 	private void quit(){
-		main.init = this;
-		main.simulator = new Simulator(main);
-		/*
-		if(Main.simulator==null){
-			Main.simulator = new Simulator();
-		}else{
-			Main.simulator.refresh();
-		}
-		*/
-		return;
+		Main.init = this;
+		Main.simulator = new Simulator(main);
 	}
-	
-	
-	private void printConnections(){
-		
-		System.out.println("connectedA = "+connectedA);
-		System.out.println("connectedB = "+connectedB);
-		System.out.println("connectedC = "+connectedC);
-		System.out.println("connected1 = "+connected1);
-		System.out.println("connected2 = "+connected2);
-		System.out.println("connected3 = "+connected3);
-		System.out.println("connected4 = "+connected4);
-		System.out.println();
-		System.out.println("cMotorL = "+cMotorL);
-		System.out.println("cMotorR = "+cMotorR);
-		System.out.println("clicksLED = "+clicksLED);
-		System.out.println("cLightL = "+cLightL);
-		System.out.println("cLightR = "+cLightR);
-		System.out.println("cUltra = "+cUltra);
-		System.out.println();
-		
-		
-		
-		
-	}
+
 	
 	private void disconnect(String s, String button){
-		if(s.equals("A")){
-			connectedA = false;
-		}else if(s.equals("B")){
-			connectedB = false;
-		}else if(s.equals("C")){
-			connectedC = false;
-		}else if(s.equals("1")){
-			connected1 = false;
-		}else if(s.equals("2")){
-			connected2 = false;
-		}else if(s.equals("3")){
-			connected3 = false;
-		}else if(s.equals("4")){
-			connected4 = false;
+		switch (s) {
+			case "A":
+				connectedA = false;
+				break;
+			case "B":
+				connectedB = false;
+				break;
+			case "C":
+				connectedC = false;
+				break;
+			case "1":
+				connected1 = false;
+				break;
+			case "2":
+				connected2 = false;
+				break;
+			case "3":
+				connected3 = false;
+				break;
+			case "4":
+				connected4 = false;
+				break;
 		}
 		
 		
@@ -698,56 +623,59 @@ public class Init {
 		if(button.contains(element)){
 			cUltra = true;
 		}
-		
-		
-		//printConnections();
+
 		ok.setEnabled(clicksLED>=MINIMAL_CLICKS_LED_TO_OKE || (!cMotorL && !cMotorR));
 		ok2.setEnabled(clicksLED>=MINIMAL_CLICKS_LED_TO_OKE || (!cMotorL && !cMotorR));
-		
-		
-		
 	}
 	
-	private void connect(String s, String keuze){
-		if(s.equals("A")){
-			connectedA = true;
-		}else if(s.equals("B")){
-			connectedB = true;
-		}else if(s.equals("C")){
-			connectedC = true;
-		}else if(s.equals("1")){
-			connected1 = true;
-		}else if(s.equals("2")){
-			connected2 = true;
-		}else if(s.equals("3")){
-			connected3 = true;
-		}else if(s.equals("4")){
-			connected4 = true;
+	private void connect(String s, String partie_robot){
+		switch (s) {
+			case "A":
+				connectedA = true;
+				break;
+			case "B":
+				connectedB = true;
+				break;
+			case "C":
+				connectedC = true;
+				break;
+			case "1":
+				connected1 = true;
+				break;
+			case "2":
+				connected2 = true;
+				break;
+			case "3":
+				connected3 = true;
+				break;
+			case "4":
+				connected4 = true;
+				break;
 		}
 		
 		
 		
-		if(keuze.equals("motorR")){
+		if(partie_robot.equals("motorR")){
 			cMotorR = false;
 		}
 		
-		if(keuze.equals("motorL")){
+		if(partie_robot.equals("motorL")){
 			cMotorL = false;
 		}
 		
-		if(keuze.equals("LED")){
+		if(partie_robot.equals("LED")){
 			clicksLED++;
 		}
 		
-		if(keuze.equals("lightL")){
+		if(partie_robot.equals("lightL")){
 			cLightL = false;
 		}
 		
-		if(keuze.equals("lightR")){
+		if(partie_robot.equals("lightR")){
 			cLightR = false;
 		}
 		
-		if(keuze.equals("ultra")){
+		if(partie_robot.equals("ultra")){
 			cUltra = false;
 		}
 		

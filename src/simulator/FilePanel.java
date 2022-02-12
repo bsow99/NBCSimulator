@@ -43,14 +43,12 @@ public class FilePanel {
 		}
 		return -1;
 	}
-	
-	
-	
+
 	
 	public Code getCode(){
 		
 		JFileChooser fc = new JFileChooser();
-		FileNameExtensionFilter f = new FileNameExtensionFilter("MATLAB-file (.m) ", "m", "matlab");
+		FileNameExtensionFilter f = new FileNameExtensionFilter("NBC-file (.nbc) ", "nbc");
 		fc.setFileFilter(f);
 		
 		int returnVal = fc.showOpenDialog(null);
@@ -79,24 +77,10 @@ public class FilePanel {
             return code;
             
         }else {
-        	System.out.println("FilePanel:\tOpen command cancelled by user.");
-        }
-		
+			System.out.println("FilePanel:\tOpen command cancelled by user.");
+		}
 		
 		return null;
 		
-		
 	}
-	
-	
-	
-	
-	/*
-	public static void main(String[] args) {
-		System.out.println(new FilePanel().getCode().toString());
-	}
-	 */
-	
-	
-
 }
