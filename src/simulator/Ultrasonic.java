@@ -1,16 +1,16 @@
 package simulator;
 
 public class Ultrasonic implements Sensor{
-	
+
 	private boolean power;
-	
-	
+
+
 	public Robot robot;
 	
 	public Ultrasonic(Robot robot){
 		
 		this.robot = robot;
-		
+
 		power = false;
 	}
 	
@@ -27,7 +27,7 @@ public class Ultrasonic implements Sensor{
 	}
 	
 	public int getValue() {
-		return robot.main.simulator.graphicsPanel.gd.ultraDistance;
+		return GraphicsPanel.gd.ultraDistance;
 	}
 	
 }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/nxtsim-master.iml" filepath="$PROJECT_DIR$/.idea/nxtsim-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/2122_INFOB318_BCSim2D.iml" filepath="$PROJECT_DIR$/2122_INFOB318_BCSim2D.iml" />
     </modules>
   </component>
 </project>

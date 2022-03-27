@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="2122_INFOB318_BCSim2D:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/2122_INFOB318_BCSim2D_jar</output-path>
+    <root id="root">
+      <element id="archive" name="2122_INFOB318_BCSim2D.jar">
+        <element id="module-output" name="2122_INFOB318_BCSim2D" />
+      </element>
+      <element id="library" level="project" name="KGradientPanel-SNAPSHOT" />
+      <element id="library" level="module" name="JUnit4" module-name="2122_INFOB318_BCSim2D" />
+    </root>
+  </artifact>
+</component>

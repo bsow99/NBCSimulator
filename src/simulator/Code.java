@@ -25,8 +25,6 @@ public class Code {
 		return numberLines;
 	}
 
-
-
 	public int numberOfSpace(int index){
 		System.out.println("#  numberOfSpace("+index+")");
 		if(code[index].length()==0){
@@ -39,36 +37,16 @@ public class Code {
 		System.out.println("   space = "+space+"\ti = "+i);
 
 		while(i<code[index].length() && (code[index].charAt(i) == ' ' || code[index].charAt(i) == '\t')){
-			//System.out.println("    code["+index+"].charAt("+i+") =" + code[index].charAt(i));
-
 			if(code[index].charAt(i) == ' '){
 				space++;
 			}else{
 				space+=4;
 			}
 			i++;
-			//System.out.println("    space = "+space+"\ti = "+i);
 		}
 		return space;
 	}
 
-
-	public int endOfLine(int beginIndex, int numberSpaces){
-		//System.out.println("# endOfLine("+beginIndex+","+numberSpaces+")");
-
-		int i = beginIndex+1;
-
-		while(i < numberLines){
-			//System.out.println("  "+i+"<"+numberLines+"\tgeeft true");
-			if(numberOfSpace(i) == numberSpaces){
-				return i;
-			}else{
-				i++;
-			}
-		}
-		//System.out.println(" i = "+i);
-		return -1;
-	}
 
 	@Override
 	public String toString(){

@@ -99,15 +99,13 @@ public class Robot {
 	
 	
 	public void setMotor(char character, int snelheid){
-		/*if(character==null || character!='A' || character!='B' || character!='C'){
-			throw new Error("Robot:\tsetMotor()");
-		}
-		*/
+
 		if(character == 'A'){
 			if(a.getType().equals("MotorLeft")){
 				((MotorL) a).setSpeed(snelheid);
 				((MotorL) a).open();
 			}else if(a.getType().equals("MotorRight")){
+				((MotorR) a).setSpeed(snelheid);
 				((MotorR) a).setSpeed(snelheid);
 				((MotorR) a).open();
 			}else{

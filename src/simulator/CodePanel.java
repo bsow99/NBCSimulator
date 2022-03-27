@@ -1,17 +1,15 @@
 package simulator;
 
+/*
+ * @Overview
+ * This class is used to create the panel where the user will see
+ * the code that he has imported
+ */
+
 import java.awt.Color;
 import java.awt.Dimension;
-
 import javax.swing.BorderFactory;
-import javax.swing.JTextArea;
 import javax.swing.JTextPane;
-import javax.swing.text.DefaultStyledDocument;
-import javax.swing.text.SimpleAttributeSet;
-import javax.swing.text.StyleConstants;
-import javax.swing.text.StyleContext;
-import javax.swing.text.StyledDocument;
-
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,24 +25,24 @@ public class CodePanel extends JTextPane{
 		this.main = main;
 		init();
 		editText();
-		
+
+		//When we click on this panel that opens the file panel to permit us
+		// to choose a file
 		addMouseListener(new MouseAdapter() {
-			
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            	System.out.println("CodePanel:\tmouseClicked\t" + e.getX() + "," + e.getY());
-
-            	//quand on clique sur le panel ça ouvre le file panel afin qu'on puisse choisir un fichier
-
-            	Simulator.code = new FilePanel(main).getCode();
-	            Main.simulator.refresh();
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			System.out.println("CodePanel:\tmouseClicked\t" + e.getX() + "," + e.getY());
+			Simulator.code = new FilePanel(main).getCode();
+			Main.simulator.refresh();
             }
             
         });
 	}
 
 	/**
-	 * This function initiate the code panel
+	 * @author : Babacar Sow
+	 * This function create the panel where we write the code after
+	 * the file's import
 	 */
 	
 	private void init(){
@@ -61,8 +59,10 @@ public class CodePanel extends JTextPane{
 
 	/**
 	 * @author : Babacar Sow
+	 * @require nothing
 	 * This function is used to write the code inside the code panel but also
 	 * to tell us to import a file
+	 * if we import a file we print it in this panel (the else part)
 	 * @version 2
 	 */
 	private void editText(){
@@ -85,9 +85,10 @@ public class CodePanel extends JTextPane{
 	}
 
 	/**
+	 * @author : Babacar Sow
 	 * We use this function to draw the code panel and to write the code into it when have an update
 	 */
-	public void refresh(){
+	public void paint(){
 		init();//place the panel
 		editText();// show the text in the panel
 	}

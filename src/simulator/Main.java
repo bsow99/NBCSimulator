@@ -2,35 +2,48 @@ package simulator;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
+import java.util.Objects;
 import javax.swing.*;
 
+/**
+ * @author Babacar
+ * @Overview This class is the main class
+ * In this class we have the main Frame
+ * where we add all the the other panels
+ *
+ * In this class we also have some threads which
+ * allow us to do the simulation
+ *
+ * The instructions jmp, brtst, brcmp and wait are
+ * also managed in this class
+ */
 
 public class Main {
 	
 	public static final int WIDTH = 1024, HEIGHT = 768 + 2*MenuBar.HEIGHT;
-	//public final static Color ORANGE = new Color(68, 33, 14);
 	public final static Color ORANGE = new Color(232, 131, 56);
 	
 	public static JFrame frame;
-	
-	public static Init init;
 	public static Simulator simulator;
+	public static Presentation accueil;
+	public static Init init;
 	
-	public String title = "NXTUNamur - Lego Mindstorms NXT 2.0 Simulator";
+	public String title = "NBCUNamur - Lego Mindstorms NBC Simulator";
 	public static boolean endDetected;
-	
-	public Main(){
-		
+
+	/**
+	 * @author Babacar
+	 * Constructeur de la classe
+	 */
+	public Main() {
 		init();
 	}
 
-	public void init(){
-		
+	/**
+	 * @author Babacar
+	 * @effects initialise la fenetre principale avec ses caracteristiques
+	 */
+	public void init()  {
 		frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(WIDTH, HEIGHT);
@@ -38,88 +51,41 @@ public class Main {
 		frame.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
-
 		frame.pack();
 		frame.setVisible(true);
-		
-		init = new Init(this);
-			
+
+		/******************************************************
+		 * Pour passer les tests mettre accueil en commentaires (ligne 42)
+		 * desactiver les commentaires de init (ligne 43)
+		 ********************************************************/
+		accueil = new Presentation(this);
+		//init = new Init(this);
+
 	}
-	
-	
-	//public void start(){
-		
-		/*
-		boolean running = true;
-		while(running){
-			System.out.print("");
-			if(Main.simulator.run != null){
-				while(Main.simulator.graphicsPanel.gd.pointX>0 && Main.simulator.graphicsPanel.gd.pointY>0){
-		        	Main.simulator.graphicsPanel.drive();
-		        }
-				running = false;
-			}
-		}
-		*/
-		
-		/*
-		while(true){
-			System.out.print("");
-			if(Main.simulator.run != null){
-				//System.out.println("run");
-				while(Main.init.robot.isOn){
-						System.out.println("> run");
-					Main.simulator.run.run();
-						System.out.println("> drive");
-					Main.simulator.graphicsPanel.drive();
-						System.out.println("> repaint");
-					Main.simulator.outputPanel.repaint();
-					
-				}
-			}
-		}
-		*/
-		
-		/*
-		while(true){
-			System.out.print("");
-			if(Main.simulator.run != null){
-				Main.simulator.run.run();
-			}
-		}
-		*/
-		
-		//System.out.println("Program ends");
-	//}
-	
-	
-	/*
-	public static void run(){
-		for(int i=0; i<10; i++){
-			System.out.println("run i="+i);
-			Main.simulator.graphicsPanel.drive();
-		}
-		
-		
-	}
-	*/
-	
-	
+
+	/**
+	 * @auhor Babacar Sow
+	 *
+	 * @effects Fonction princiaple qui nous permet de lancer la simulation
+	 * 1) lance l'execution du code si nous apppuyons sur le bouton run
+	 * 2) cette fonction gere nos threads pour pouvoir lancer la simulation
+	 * 3)cette fonction nous aide à pouvoir executer les instructions jmp, brtst, brcmp et wait
+	 *
+	 * @param args liste d'arguments
+	 */
 	public static void main(String[] args) {
-		
+
 		Runnable r1 = () -> {
 			endDetected = false;
 
 			boolean runCode = true;
+			System.out.println(runCode);
 			while(runCode){
 				System.out.print("");
-				if(simulator!=null && simulator.menuBar.runIsClicked){
-					System.out.println("#running");
 
-					//simulator.graphicsPanel.gd.printData();
-					//simulator.graphicsPanel.gd.printData2();
+				if(simulator!=null && Simulator.menuBar.runIsClicked){
+					System.out.println("###1");
 					simulator.performStep();
-					//simulator.refresh();
 
 					try {
 						double seconds = 0.5;
@@ -129,78 +95,92 @@ public class Main {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
-					if(simulator.run !=null){
+					System.out.print("");
+					if(Simulator.run !=null){
 						System.out.println("###2");
-						if(simulator.run.pauseFound){
-							System.out.println("###3");
+						if(!Simulator.run.instructionSet.isEmpty()){
+							Instruction a_instruc = Simulator.run.instructionSet.pop();
 							try {
-								System.out.println("Main:\tpause "+simulator.run.pause+" milliseconds... ");
-								Thread.sleep((int) (simulator.run.pause+0.5));
-								simulator.run.pauseFound = false;
-								simulator.run.read(simulator.run.pauseLine+1, simulator.run.pauseEnd);
+								if(a_instruc.getLine().contains("wait")){
+									String line = a_instruc.getLine();
+									line = line.replace("wait", "");
+									String time = line.trim();
+									int value;
+									if(Variable.has(time)){
+										value =Integer.parseInt(Objects.requireNonNull(Variable.getValue(time)));
+									}
+									else{
+										value = Integer.parseInt(time);
+									}
+
+									long start = System.currentTimeMillis();
+									long end = start + value;
+									while (System.currentTimeMillis() < end) {
+										Thread.sleep(500);
+										simulator.performStep();
+									}
+									System.out.println(Thread.currentThread().getName());
+								} else if(a_instruc.getLine().contains("brcmp")){
+
+									String line = a_instruc.getLine();
+									InstructionSet instructions_new = new InstructionSet();
+									Boolean ok = Simulator.run.comparaison_toLabel(line,instructions_new);
+									if (ok){
+										Simulator.run.instructionSet = instructions_new;
+									}
+								}
+								else if(a_instruc.getLine().contains("brtst")){
+
+									// brtst GTEQ, CheckSensor, Level
+									String line = a_instruc.getLine();
+									line += ", 0";
+									// brtst GTEQ, CheckSensor, Level, 0
+
+									InstructionSet instructions_new = new InstructionSet();
+
+									//System.out.println(instructions_backup.instructions.size());
+									Boolean ok = Simulator.run.comparaison_toLabel(line,instructions_new);
+									if (ok){
+										Simulator.run.instructionSet = instructions_new;
+									}
+
+								}
+								else if (a_instruc.getLine().contains("jmp")){
+									String line = a_instruc.getLine();
+									InstructionSet instructions_new = new InstructionSet();
+									Simulator.run.jump_toLabel(line,instructions_new);
+									Simulator.run.instructionSet = instructions_new;
+								}
+								else {
+									Simulator.run.executeLine(a_instruc.getLine(),a_instruc.getNumberLine());}
 							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-						}else{
-							System.out.println("###4");
-							if(!simulator.run.loopSet.isEmpty()){
-								Loop loop = simulator.run.loopSet.pop();
-								System.out.println("###5");
-								if(loop.type.equals("for")){
-									simulator.run.forLoop(loop);
-								}else{
-									simulator.run.whileLoop(loop);
-								}
-							}else{
-								System.out.println("###6");
-								System.out.println("# stopRun is true");
-								//runCode = false;
-
-								if(!endDetected){
-									System.out.println("prrrr");
-									endDetected = true;
-									simulator.outputPanel.setMidden("Running the NBC-file is completed.\n");
-									//simulator.print("Reading the MATLAB-file is completed.\n");
-								}
-
-								if(simulator.graphicsPanel.gd.outOfScreen()){
-
-									//System.out.println("# outOfScreen");
-									//runCode=false;
-								}
-							}
-
 						}
 					}
 
 				}
-
-
 			}
 
 			System.out.println("Thread 1 is stopped.");
+		};
+		new Thread(r1).start();
 
-		 };
-	     
-	     new Thread(r1).start();
-	     
-	     Runnable r2 = new Runnable() {
-				public void run() {
-					new Main();
-					
-		         }
-		     };
-		
-	     new Thread(r2).start();
 
+		Runnable r2 = () -> new Main();
+
+		Thread p2 = new Thread(r2);
+		p2.setName("p2");
+		p2.start();
 	}
-	
-	
-	public void ververs(){
+
+	/**
+	 * @author Babacar
+	 * @effects this function is used to know if the code is still running
+	 */
+	public void end(){
 		endDetected = false;
 	}
-	
-	
+
+
 }
