@@ -1,0 +1,14 @@
+dseg segment
+Level sword 0
+THRESHOLD 60
+dseg ends
+thread main
+SetSensorLight(IN_3)
+CheckSensor:
+OnFwd(OUT_BC,100)
+ReadSensor(IN_3,Level)
+brcmp GTEQ, CheckSensor, Level, 400
+OnRev(OUT_BC,100)
+wait 3000
+jmp CheckSensor
+endt

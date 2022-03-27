@@ -1,0 +1,29 @@
+#define MOVE_TIME   800
+#define TURN_TIME   200
+
+dseg segment
+  Switch sword 0
+dseg ends
+
+thread main
+  SetSensorTouch(IN_1)
+
+SquareLoop:
+ 
+  OnFwd(OUT_BC,100)
+  wait MOVE_TIME
+  OnRev(OUT_C,100)
+  wait TURN_TIME
+  jmp SquareLoop
+
+
+SensorLoop:
+  ReadSensor(IN_1,Switch)
+  brtst EQ, SensorLoop, Switch
+  OnRev(OUT_BC,100)
+  wait 50
+  Off(OUT_C)
+  wait 85
+  jmp SensorLoop
+endt
+

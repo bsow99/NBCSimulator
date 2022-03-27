@@ -1,0 +1,25 @@
+#define MOVE_TIME   800
+#define TURN_TIME   200
+
+thread main
+
+
+SquareLoop:
+  OnFwd(OUT_BC,100)
+  wait MOVE_TIME
+  OnRev(OUT_C,100)
+  wait TURN_TIME
+  jmp MusicLoop
+  jmp SquareLoop
+
+MusicLoop:
+  PlayTone(TONE_C5,500)
+  wait 500
+  PlayTone(TONE_D5,500)
+  wait 500
+  PlayTone(TONE_E5,500)
+  wait 500
+  PlayTone(TONE_D5,500)
+  wait 500
+  jmp MusicLoop
+endt
